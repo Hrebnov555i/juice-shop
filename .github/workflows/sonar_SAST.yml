@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  NODE_DEFAULT_VERSION: 22
+  NODE_DEFAULT_VERSION: 20
   ANGULAR_CLI_VERSION: 17
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
       uses: actions/checkout@v6
 
     - name: Setup Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_DEFAULT_VERSION }} # Ensure it matches your application's version
         cache: npm
