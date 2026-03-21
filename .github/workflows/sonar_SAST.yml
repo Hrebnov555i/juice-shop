@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  NODE_DEFAULT_VERSION: 20
+  NODE_DEFAULT_VERSION: 22
   ANGULAR_CLI_VERSION: 17
 
 jobs:
