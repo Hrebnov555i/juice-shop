@@ -1,35 +1,30 @@
-name: SAST using SonarCloud
+name: Juice Shop SAST
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
-
-env:
-  NODE_DEFAULT_VERSION: 22
-  ANGULAR_CLI_VERSION: 17
+    branches: [ "main" ]
 
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v6
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Get full history (from Workflow A)
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v6
-      with:
-        node-version: ${{ env.NODE_DEFAULT_VERSION }} # Ensure it matches your application's version
-        cache: npm
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
 
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: SonarCloud Scan
-      uses: sonarsource/sonarcloud-github-action@v3
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_JUICESHOP }}
+      - name: Install Dependencies
+        run: npm install 
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v3
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_JUICESHOP }}
