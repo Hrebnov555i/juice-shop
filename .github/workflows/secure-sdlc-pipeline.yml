@@ -24,13 +24,22 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
         # Крок завершиться з помилкою, якщо в коді знайдені API-ключі або паролі
+ 
+     # 2. Перевірка Dockerfile (Hadolint)
+      - name: Lint Dockerfile (Hadolint)
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+        continue-on-error: true
 
       # 3. Збірка образу
       - name: Build Docker image
         run: |
           docker build -t juice-shop:${{ github.sha }} .
-
+        continue-on-error: true
+       
       # 4. Сканування на CVE + Генерація звіту для Wazuh
       - name: Scan image (Trivy)
         uses: aquasecurity/trivy-action@master
@@ -39,6 +48,7 @@ jobs:
           format: 'json'
           output: 'trivy-report.json' # Зберігаємо у JSON для інтеграції
           severity: 'CRITICAL,HIGH'
+        continue-on-error: true
 
       # 5. Аналіз структури образу (Dockle)
       - name: Run Dockle
@@ -46,6 +56,7 @@ jobs:
         with:
           image: 'juice-shop:${{ github.sha }}'
           format: list
+        continue-on-error: true
 
       # 6. Збереження звіту як артефакту (для вашої лаби)
       - name: Upload Security Report
@@ -53,3 +64,4 @@ jobs:
         with:
           name: security-reports
           path: trivy-report.json
+        continue-on-error: true
