@@ -7,6 +7,10 @@ on:
     branches: [ "main", "master" ]
   workflow_dispatch:
 
+permissions:
+  pull-requests: write
+  issues: write
+
 jobs:
   security-audit:
     runs-on: ubuntu-latest
